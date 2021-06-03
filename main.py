@@ -1,4 +1,4 @@
-# /usr/bin/env python3
+#!/usr/bin/env python3
 
 import argparse
 import contextlib
@@ -9,9 +9,7 @@ from policyuniverse.expander_minimizer import minimize_policy
 
 # setup command line arguments
 parser = argparse.ArgumentParser("AWS IAM policy minifier")
-parser.add_argument(
-    "file", type=str, default="-", help="File to read IAM policy JSON from"
-)
+parser.add_argument("file", type=str, default="-", help="File to read policy doc from")
 args = parser.parse_args()
 
 # read the IAM policy to minify
@@ -66,7 +64,7 @@ with contextlib.redirect_stdout(None):
 
 min_policy_json = json.dumps(min_policy, indent=4, sort_keys=True)
 print(min_policy_json)
-print(
-    f"Original: {len(json.dumps(policy))}, Minified: {len(json.dumps(min_policy))}",
-    file=sys.stderr,
-)
+
+len_orig = len(json.dumps(policy, separators=(",", ":")))
+len_min = len(json.dumps(min_policy, separators=(",", ":")))
+print(f"Original: {len_orig}, Minified: {len_min}", file=sys.stderr)
